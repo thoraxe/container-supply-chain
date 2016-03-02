@@ -1,6 +1,12 @@
 Supply Chain Demo
 ======================================
 
+Usage
+-----
+This repository is meant to demonstrate a software supply chain that provides best practices for operations teams looking to  adopt containers in a production environment. 
+
+Deeper explaination will be followed up in a blog entry, but a technical person should be able to look at these docs and understand how to implement a sane container software supply chain. This particular implementation uses a Red Hat stack but these concepts apply equally to Ubuntu, Debian, CentOS or Fedora. 
+
 Directories
 -----------
 
