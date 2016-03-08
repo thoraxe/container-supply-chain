@@ -3,7 +3,7 @@ Middleware Core Build
 
 Preparation
 -----------
-Make sure dockerifles are installed locally on the build system
+Make sure dockerfiles are installed locally on the build system
 ```
 yum install rhscl-dockerfiles.noarch
 cp /usr/share/rhscl-dockerfiles/rhel7/rh-php56/enablerh-php56.sh ./
