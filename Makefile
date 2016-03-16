@@ -24,11 +24,11 @@ test:
 	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh
 
 tag_production:
-	docker tag -f $(COREBUILD_NAME):$(VERSION) $(USERNAME)/$(COREBUILD_NAME):production
-	docker tag -f $(MW_COREBUILD_NAME):$(VERSION) $(USERNAME)/$(MW_COREBUILD_NAME):production
-	docker tag -f $(APPLICATION_BUILD_NAME):$(VERSION) $(USERNAME)/$(APPLICATION_BUILD_NAME):production
+	docker tag -f $(COREBUILD_NAME):latest $(USERNAME)/$(COREBUILD_NAME):production
+	docker tag -f $(MW_COREBUILD_NAME):latest $(USERNAME)/$(MW_COREBUILD_NAME):production
+	docker tag -f $(APPLICATION_BUILD_NAME):latest $(USERNAME)/$(APPLICATION_BUILD_NAME):production
 
-release: test tag_latest
+release: test tag_production
 	@if ! docker images $(USERNAME)/$(COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
 	docker push $(USERNAME)/$(COREBUILD_NAME)
 	@if ! docker images $(USERNAME)/$(MW_COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
