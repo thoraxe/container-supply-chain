@@ -25,9 +25,9 @@ test:
 	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh
 
 tag_production:
-	docker tag -f $(COREBUILD_NAME):latest $(USERNAME)/$(COREBUILD_NAME):production
-	docker tag -f $(MW_COREBUILD_NAME):latest $(USERNAME)/$(MW_COREBUILD_NAME):production
-	docker tag -f $(APPLICATION_BUILD_NAME):latest $(USERNAME)/$(APPLICATION_BUILD_NAME):production
+	docker tag -f $(COREBUILD_NAME):latest $(COREBUILD_NAME):production
+	docker tag -f $(MW_COREBUILD_NAME):latest $(MW_COREBUILD_NAME):production
+	docker tag -f $(APPLICATION_BUILD_NAME):latest $(APPLICATION_BUILD_NAME):production
 
 release: test tag_production
 	@if ! docker images $(USERNAME)/$(COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
