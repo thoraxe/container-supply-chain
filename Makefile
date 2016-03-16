@@ -3,6 +3,7 @@ MW_COREBUILD_NAME = httpd-php
 APPLICATION_BUILD_NAME = wordpress
 USERNAME = example
 VERSION = 1.0.0
+REGISTRY = 10.0.1.1
 
 all: build
 
