@@ -1,28 +1,37 @@
-COREBUILD_NAME = rhel7-corebuild
-MW_COREBUILD_NAME = corebuild-php56-httpd24
-APPLICATION_NAME = php56-httpd24-wordpress
+COREBUILD_NAME = corebuild
+MW_COREBUILD_NAME = httpd-php
+APPLICATION_BUILD_NAME = wordpress
 USERNAME = example
 VERSION = 1.0.0
 
 all: build
 
-build:
-	docker build -t $(USERNAME)/$(COREBUILD_NAME):$(VERSION) $(COREBUILD_NAME)/
-	docker build -t $(USERNAME)/$(MW_COREBUILD_NAME):$(VERSION) $(MW_COREBUILD_NAME)
-	docker build -t $(USERNAME)/$(APPLICATION_NAME):$(VERSION) $(APPLICATION_NAME)/
+build: $(COREBUILD_NAME).o $(MW_COREBUILD_NAME).o $(APPLICATION_BUILD_NAME).o
+
+$(COREBUILD_NAME).o: $(COREBUILD_NAME)/*
+	docker build -t $(COREBUILD_NAME) $(COREBUILD_NAME)/
+	@if docker images $(COREBUILD_NAME) | grep $(COREBUILD_NAME); then touch $(COREBUILD_NAME).o; fi
+
+$(MW_COREBUILD_NAME).o: $(MW_COREBUILD_NAME)/* $(COREBUILD_NAME).o
+	docker build -t $(MW_COREBUILD_NAME) $(MW_COREBUILD_NAME)/
+	@if docker images $(MW_COREBUILD_NAME) | grep $(MW_COREBUILD_NAME); then touch $(MW_COREBUILD_NAME).o; fi
+
+$(APPLICATION_BUILD_NAME).o: $(APPLICATION_BUILD_NAME)/* $(MW_COREBUILD_NAME).o
+	docker build -t $(APPLICATION_BUILD_NAME) $(APPLICATION_BUILD_NAME)/
+	@if docker images $(APPLICATION_BUILD_NAME) | grep $(APPLICATION_BUILD_NAME); then touch $(APPLICATION_BUILD_NAME).o; fi
 
 test:
 	env NAME=$(NAME) VERSION=$(VERSION) ./test.sh
 
-tag_latest:
-	docker tag -f $(USERNAME)/$(COREBUILD_NAME):$(VERSION) $(USERNAME)/$(COREBUILD_NAME):latest
-	docker tag -f $(USERNAME)/$(MW_COREBUILD_NAME):$(VERSION) $(USERNAME)/$(MW_COREBUILD_NAME):latest
-	docker tag -f $(USERNAME)/$(APPLICATION_NAME):$(VERSION) $(USERNAME)/$(APPLICATION_NAME):latest
+tag_production:
+	docker tag -f $(COREBUILD_NAME):$(VERSION) $(USERNAME)/$(COREBUILD_NAME):production
+	docker tag -f $(MW_COREBUILD_NAME):$(VERSION) $(USERNAME)/$(MW_COREBUILD_NAME):production
+	docker tag -f $(APPLICATION_BUILD_NAME):$(VERSION) $(USERNAME)/$(APPLICATION_BUILD_NAME):production
 
 release: test tag_latest
 	@if ! docker images $(USERNAME)/$(COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
 	docker push $(USERNAME)/$(COREBUILD_NAME)
 	@if ! docker images $(USERNAME)/$(MW_COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
 	docker push $(USERNAME)/$(MW_COREBUILD_NAME)
-	@if ! docker images $(USERNAME)/$(APPLICATION_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
-	docker push $(USERNAME)/$(APPLICATION_NAME)
+	@if ! docker images $(USERNAME)/$(APPLICATION_BUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
+	docker push $(USERNAME)/$(APPLICATION_BUILD_NAME)
