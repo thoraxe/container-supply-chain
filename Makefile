@@ -29,10 +29,10 @@ tag_production:
 	docker tag -f $(MW_COREBUILD_NAME):latest $(MW_COREBUILD_NAME):production
 	docker tag -f $(APPLICATION_BUILD_NAME):latest $(APPLICATION_BUILD_NAME):production
 
-release: test tag_production
-	@if ! docker images $(USERNAME)/$(COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
-	docker push $(USERNAME)/$(COREBUILD_NAME)
-	@if ! docker images $(USERNAME)/$(MW_COREBUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
-	docker push $(USERNAME)/$(MW_COREBUILD_NAME)
-	@if ! docker images $(USERNAME)/$(APPLICATION_BUILD_NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then make build; false; fi
-	docker push $(USERNAME)/$(APPLICATION_BUILD_NAME)
+push:
+	docker tag -f $(COREBUILD_NAME) $(SERVER)/$(COREBUILD_NAME)
+	docker tag -f $(MW_COREBUILD_NAME) $(SERVER)/$(MW_COREBUILD_NAME)
+	docker tag -f $(APPLICATION_BUILD_NAME) $(SERVER)/$(APPLICATION_BUILD_NAME)
+	docker push $(SERVER)/$(COREBUILD_NAME)
+	docker push $(SERVER)/$(MW_COREBUILD_NAME)
+	docker push $(SERVER)/$(APPLICATION_BUILD_NAME)
