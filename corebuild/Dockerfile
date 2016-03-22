@@ -7,6 +7,7 @@ RUN yum install -y --setopt=tsflags=nodocs --disablerepo="*" --enablerepo="rhel-
     yum-config-manager --disable "*" && \
     yum-config-manager --enable rhel-7-server-rpms && \
     yum update -y --setopt=tsflags=nodocs && \
+    yum install -y iputils net-tools nmap-ncat nmap && \
     yum install -y tar && \
     yum clean all
 
