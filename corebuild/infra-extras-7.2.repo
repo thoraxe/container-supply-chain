@@ -1,0 +1,5 @@
+[infra-extras-7.2]
+name=infra-extras-7.2
+baseurl=http://infranode:8080/EXTRAS/
+enabled=1
+gpgcheck=0

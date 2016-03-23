@@ -1,0 +1,5 @@
+[ose-devel]
+name=ose-devel
+baseurl=http://infranode:8080/RHAOS/x86_64/os
+enabled=1
+gpgcheck=0

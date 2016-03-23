@@ -1,0 +1,5 @@
+[infra-rhel-7.2]
+name=infra-rhel-7.2
+baseurl=http://infranode:8080/RHEL/
+enabled=1
+gpgcheck=0
