@@ -1,4 +1,4 @@
-FROM corebuild
+FROM container-supply-chain
 
 # Guidance from: https://github.com/openshift/sti-php/blob/master/5.6/Dockerfile.rhel7
 MAINTAINER docker@softwarecollections.org
